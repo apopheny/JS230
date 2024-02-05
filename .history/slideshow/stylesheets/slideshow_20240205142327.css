@@ -1,0 +1,64 @@
+body {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+#slideshowContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-height: 100vh;
+  max-width: 1200px; /* Adjust based on your content's needs */
+  background-color: #333;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.slideshow h1 {
+  color: #fff;
+  margin: 20px 0;
+}
+
+.loadedPicture {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+
+.loadedPicture img {
+  max-width: 100%;
+  max-height: 400px; /* Adjust based on your content's needs */
+}
+
+#captionText {
+  color: #fff;
+  margin: 20px 0;
+}
+
+.image-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center the thumbnails */
+  gap: 20px; /* Space between thumbnails */
+  width: 100%;
+  margin-top: 20px;
+}
+
+.image-thumbnail img {
+  width: 100px; /* Adjust based on your preference */
+  height: auto;
+  cursor: pointer; /* Indicate clickable */
+  transition: transform 0.2s; /* Smooth scaling effect */
+}
+
+.image-thumbnail img:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}

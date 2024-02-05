@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meme Slideshow</title>
+    <link rel="stylesheet" href="stylesheets/slideshow.css" />
+  </head>
+  <body>
+    <div id="slideshowContainer"></div>
+    <script type="text/x-handlebars-template" id="galleryTemplate">
+      <div class="slideshow">
+        <h3>4 Programming Memes</h3>
+        <div>
+          {{> loadedPicturePartial this}}
+        </div>
+        <div class="gallery">
+          {{> imageGalleryPartial this}}
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars-template" id="loadedPicturePartial">
+      {{#each this}}
+        <div class="loadedPicture">
+          <img src="assets/pic_{{this.id}}.png" alt="{{this.alt}}" />
+        </div>
+        <span id="captionText">{{this.alt}}</span>
+      {{/each}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="imageGalleryPartial">
+      <div class="image-gallery">
+        {{#each this}}
+          <img src="assets/pic_{{this.id}}.png" class="image-thumbnail" />
+        {{/each}}
+      </div>
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script src="javascripts/slideshow.js"></script>
+  </body>
+</html>
