@@ -1,0 +1,43 @@
+.modal {
+  position: fixed; /* Keep the modal in place even if scrolled */
+  top: 50%; /* top and left set the corner of the element in the center of the viewport */
+  left: 50%;
+  transform: translate(
+    -50%,
+    -50%
+  ); /* moves the element's corner up and left by 50% of its dimensions, combining with top and left to center it */
+  z-index: 11; /* Greater z-index value than .modal_layer, rendering it in front of it */
+  background-color: #fff;
+  padding: 20px; /* Spacing inside the modal */
+  border-radius: 8px; /* Stupid property name, but it's the radius for the corners of the border */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Shadow for depth. */
+  max-width: 90%; /* Ensure it doesn't overflow the viewport. */
+  max-height: 90%; /* Ensure it doesn't overflow the viewport. */
+  overflow-y: auto; /* Enable scroll if content is too long. Max-height can still be overflowed by enough content */
+}
+
+.modal img {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  padding: 10px;
+  max-width: 100%; /* Ensure images don't overflow the modal */
+}
+
+.modal h3 {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  padding: 10px;
+  max-width: 100%; /* Ensure images don't overflow the modal */
+}
+
+.modal p {
+  position: relative;
+}
+
+.close {
+  position: absolute; /* Position it relative to .modal */
+  top: 10px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+}
