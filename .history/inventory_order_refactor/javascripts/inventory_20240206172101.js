@@ -54,8 +54,9 @@ var inventory;
       e.preventDefault();
       let item = this.add(),
         itemHTMLString = this.template.replace(/ID/g, item.id);
-      itemHTMLString, "text/html";
-
+        itemHTMLString,
+        "text/html"
+      );
       document
         .querySelector("#inventory")
         .insertAdjacentHTML("beforeend", itemHTMLString);

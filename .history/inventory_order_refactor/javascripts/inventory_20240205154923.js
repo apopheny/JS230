@@ -54,11 +54,14 @@ var inventory;
       e.preventDefault();
       let item = this.add(),
         itemHTMLString = this.template.replace(/ID/g, item.id);
-      itemHTMLString, "text/html";
-
-      document
-        .querySelector("#inventory")
-        .insertAdjacentHTML("beforeend", itemHTMLString);
+      let inventoryElements = document.querySelectorAll("#inventory");
+      let elements = new DOMParser().parseFromString(
+        itemHTMLString,
+        "text/html"
+      );
+      console.log(itemHTMLString, elements);
+      // inventoryElements[inventoryElements.length - 1]
+      $("#inventory").append(itemHTMLString);
     },
     findParent(e) {
       return $(e.target).closest("tr");

@@ -6,12 +6,11 @@ var inventory;
     collection: [],
     setDate() {
       let date = new Date();
-      document.querySelector("#order_date").textContent = date.toUTCString();
+      $("#order_date").text(date.toUTCString());
     },
     cacheTemplate() {
-      let iTmpl = document.querySelector("#inventory_item");
-      this.template = iTmpl.innerHTML;
-      iTmpl.remove();
+      let $iTmpl = $("#inventory_item").remove();
+      this.template = $iTmpl.html();
     },
     add() {
       this.lastId++;
@@ -53,12 +52,9 @@ var inventory;
     newItem(e) {
       e.preventDefault();
       let item = this.add(),
-        itemHTMLString = this.template.replace(/ID/g, item.id);
-      itemHTMLString, "text/html";
+        $item = $(this.template.replace(/ID/g, item.id));
 
-      document
-        .querySelector("#inventory")
-        .insertAdjacentHTML("beforeend", itemHTMLString);
+      $("#inventory").append($item);
     },
     findParent(e) {
       return $(e.target).closest("tr");

@@ -4,16 +4,15 @@ var inventory;
   inventory = {
     lastId: 0,
     collection: [],
-    setDate() {
+    setDate: function () {
       let date = new Date();
-      document.querySelector("#order_date").textContent = date.toUTCString();
+      $("#order_date").text(date.toUTCString());
     },
-    cacheTemplate() {
-      let iTmpl = document.querySelector("#inventory_item");
-      this.template = iTmpl.innerHTML;
-      iTmpl.remove();
+    cacheTemplate: function () {
+      let $iTmpl = $("#inventory_item").remove();
+      this.template = $iTmpl.html();
     },
-    add() {
+    add: function () {
       this.lastId++;
       let item = {
         id: this.lastId,
@@ -25,12 +24,12 @@ var inventory;
 
       return item;
     },
-    remove(idx) {
+    remove: function (idx) {
       this.collection = this.collection.filter(function (item) {
         return item.id !== idx;
       });
     },
-    get(id) {
+    get: function (id) {
       let found_item;
 
       this.collection.forEach(function (item) {
@@ -42,7 +41,7 @@ var inventory;
 
       return found_item;
     },
-    update($item) {
+    update: function ($item) {
       let id = this.findID($item),
         item = this.get(id);
 
@@ -50,39 +49,36 @@ var inventory;
       item.stock_number = $item.find("[name^=item_stock_number]").val();
       item.quantity = $item.find("[name^=item_quantity]").val();
     },
-    newItem(e) {
+    newItem: function (e) {
       e.preventDefault();
       let item = this.add(),
-        itemHTMLString = this.template.replace(/ID/g, item.id);
-      itemHTMLString, "text/html";
+        $item = $(this.template.replace(/ID/g, item.id));
 
-      document
-        .querySelector("#inventory")
-        .insertAdjacentHTML("beforeend", itemHTMLString);
+      $("#inventory").append($item);
     },
-    findParent(e) {
+    findParent: function (e) {
       return $(e.target).closest("tr");
     },
-    findID($item) {
+    findID: function ($item) {
       return +$item.find("input[type=hidden]").val();
     },
-    deleteItem(e) {
+    deleteItem: function (e) {
       e.preventDefault();
       let $item = this.findParent(e).remove();
 
       this.remove(this.findID($item));
     },
-    updateItem(e) {
+    updateItem: function (e) {
       let $item = this.findParent(e);
 
       this.update($item);
     },
-    bindEvents() {
+    bindEvents: function () {
       $("#add_item").on("click", $.proxy(this.newItem, this));
       $("#inventory").on("click", "a.delete", $.proxy(this.deleteItem, this));
       $("#inventory").on("blur", ":input", $.proxy(this.updateItem, this));
     },
-    init() {
+    init: function () {
       this.setDate();
       this.cacheTemplate();
       this.bindEvents();
