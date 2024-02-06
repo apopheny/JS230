@@ -74,25 +74,12 @@ var inventory;
       return closest(e.target, "tr");
     },
     findID($item) {
-      function findHiddenInputChild(node) {
-        let queue = [...node.children];
-
-        while (queue.length > 0) {
-          let current = queue.shift();
-          if (current.tagName === "INPUT" && current.type === "hidden") {
-            return current;
-          }
-          if (current.children.length > 0) queue.push(...current.children);
-        }
-      }
-
-      return findHiddenInputChild($item).value;
+      console.log($($item).find("input[type=hidden]").val());
+      return +$($item).find("input[type=hidden]").val();
     },
     deleteItem(e) {
       e.preventDefault();
-
-      let $item = this.findParent(e);
-      $item.remove();
+      let $item = this.findParent(e).remove();
 
       this.remove(this.findID($item));
     },

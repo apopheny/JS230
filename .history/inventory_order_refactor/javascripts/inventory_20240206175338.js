@@ -43,6 +43,7 @@ var inventory;
       return found_item;
     },
     update($item) {
+      console.log($item);
       let id = this.findID($item),
         item = this.get(id);
 
@@ -75,24 +76,26 @@ var inventory;
     },
     findID($item) {
       function findHiddenInputChild(node) {
+        console.log(node);
         let queue = [...node.children];
-
         while (queue.length > 0) {
-          let current = queue.shift();
+          let current = node.shift;
           if (current.tagName === "INPUT" && current.type === "hidden") {
             return current;
           }
-          if (current.children.length > 0) queue.push(...current.children);
-        }
-      }
 
+          if (current.children.length > 0) queue.push(current.children);
+        }
+
+        return null;
+      }
       return findHiddenInputChild($item).value;
+      // console.log(+$($item).find("input[type=hidden]").val());
+      // return +$($item).find("input[type=hidden]").val();
     },
     deleteItem(e) {
       e.preventDefault();
-
-      let $item = this.findParent(e);
-      $item.remove();
+      let $item = this.findParent(e).remove();
 
       this.remove(this.findID($item));
     },

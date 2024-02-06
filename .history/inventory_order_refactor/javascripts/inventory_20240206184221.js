@@ -76,7 +76,6 @@ var inventory;
     findID($item) {
       function findHiddenInputChild(node) {
         let queue = [...node.children];
-
         while (queue.length > 0) {
           let current = queue.shift();
           if (current.tagName === "INPUT" && current.type === "hidden") {
@@ -84,9 +83,12 @@ var inventory;
           }
           if (current.children.length > 0) queue.push(...current.children);
         }
-      }
 
+        return null;
+      }
       return findHiddenInputChild($item).value;
+      // console.log(+$($item).find("input[type=hidden]").val());
+      // return +$($item).find("input[type=hidden]").val();
     },
     deleteItem(e) {
       e.preventDefault();
