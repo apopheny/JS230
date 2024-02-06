@@ -72,6 +72,7 @@ var inventory;
       }
 
       return closest(e.target, "tr");
+      // return $(e.target).closest("tr");
     },
     findID($item) {
       return +$item.find("input[type=hidden]").val();
