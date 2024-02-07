@@ -38,11 +38,15 @@
       game.chosenWord = game.randomWord();
       console.log(game.chosenWord);
       if (game.chosenWord === undefined) {
-        game.clearLetters();
         game.wordsExhausted();
       } else {
         game.clearLetters();
         game.generateSpaces();
+        ["lose", "win"].forEach((attribute) =>
+          document.body.classList.remove(attribute)
+        );
+        game.apples.className = "";
+
         game.newGameLink.hidden = true;
         game.triesRemaining = 6;
         game.previousGuesses = [];
@@ -64,6 +68,7 @@
 
     wordsExhausted() {
       this.message.textContent = "Sorry, I've run out of words!";
+      this.newGameLink.hidden = true;
     }
 
     userGuess(event) {
@@ -84,6 +89,10 @@
     }
 
     letterMatched(guessAttempt) {
+      let span = document.createElement("span");
+      span.textContent = guessAttempt.toUpperCase();
+      this.guesses.appendChild(span);
+
       [...this.chosenWord].forEach((letter, index) => {
         if (letter === guessAttempt) {
           this.spaces.children[index + 1].textContent = letter.toUpperCase();
@@ -102,16 +111,19 @@
       span.textContent = guessAttempt.toUpperCase();
       this.guesses.appendChild(span);
       this.triesRemaining -= 1;
+      this.apples.className = `guess_${6 - this.triesRemaining}`;
 
       if (this.triesRemaining < 1) this.userLose();
     }
 
     userWin() {
-      console.log("You are fired!");
+      this.newGameLink.hidden = false;
+      document.body.classList.add("win");
     }
 
     userLose() {
-      console.log("I have a bit of bad news...");
+      this.newGameLink.hidden = false;
+      document.body.classList.add("lose");
     }
   }
 
