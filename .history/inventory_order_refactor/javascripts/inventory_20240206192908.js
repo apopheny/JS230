@@ -128,9 +128,6 @@ var inventory;
       this.remove(this.findID(item));
     },
     updateItem(e) {
-      const INPUT_TAGNAMES = ["INPUT", "TEXTAREA", "SELECT", "BUTTON"];
-      if (!INPUT_TAGNAMES.includes(e.target.tagName)) return;
-
       let item = this.findParent(e);
 
       this.update(item);
@@ -144,9 +141,8 @@ var inventory;
         .querySelector("#inventory")
         .addEventListener("click", this.deleteItem.bind(this));
 
-      document
-        .querySelector("#inventory")
-        .addEventListener("blur", this.updateItem.bind(this));
+      // $("#inventory").on("click", "a.delete", $.proxy(this.deleteItem, this));
+      $("#inventory").on("blur", ":input", $.proxy(this.updateItem, this));
     },
     init() {
       this.setDate();
@@ -156,4 +152,4 @@ var inventory;
   };
 })();
 
-document.addEventListener("DOMContentLoaded", inventory.init.bind(inventory));
+$($.proxy(inventory.init, inventory));

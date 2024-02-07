@@ -144,9 +144,9 @@ var inventory;
         .querySelector("#inventory")
         .addEventListener("click", this.deleteItem.bind(this));
 
-      document
-        .querySelector("#inventory")
-        .addEventListener("blur", this.updateItem.bind(this));
+      document.querySelector("#inventory").addEventListener("blur");
+
+      $("#inventory").on("blur", ":input", $.proxy(this.updateItem, this));
     },
     init() {
       this.setDate();
@@ -156,4 +156,4 @@ var inventory;
   };
 })();
 
-document.addEventListener("DOMContentLoaded", inventory.init.bind(inventory));
+$($.proxy(inventory.init, inventory));

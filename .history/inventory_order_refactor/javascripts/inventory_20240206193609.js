@@ -157,3 +157,5 @@ var inventory;
 })();
 
 document.addEventListener("DOMContentLoaded", inventory.init.bind(inventory));
+
+// $($.proxy(inventory.init, inventory));
