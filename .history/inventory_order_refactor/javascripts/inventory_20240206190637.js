@@ -31,7 +31,6 @@ var inventory;
       });
     },
     get(id) {
-      id = Number(id);
       let found_item;
 
       this.collection.forEach(function (item) {
@@ -59,24 +58,17 @@ var inventory;
         if (current.children.length > 0) queue.push(...current.children);
       }
     },
-    update(item) {
-      let id = this.findID(item),
-        updateItem = this.get(id);
-
-      updateItem.name = this.findChildByAttributeValue(
-        item,
+    update($item) {
+      let id = this.findID($item),
+        item = this.get(id);
+      console.log(item);
+      item.name = this.findChildByAttributeValue(
+        $item,
         "[name^=item_name]"
       ).value;
-
-      updateItem.stock_number = this.findChildByAttributeValue(
-        item,
-        "[name^=item_stock_number]"
-      ).value;
-
-      updateItem.quantity = this.findChildByAttributeValue(
-        item,
-        "[name^=item_quantity]"
-      ).value;
+      // item.name = $item.find("[name^=item_name]").val();
+      item.stock_number = $item.find("[name^=item_stock_number]").val();
+      item.quantity = $item.find("[name^=item_quantity]").val();
     },
     newItem(e) {
       e.preventDefault();

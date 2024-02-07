@@ -59,24 +59,22 @@ var inventory;
         if (current.children.length > 0) queue.push(...current.children);
       }
     },
-    update(item) {
-      let id = this.findID(item),
-        updateItem = this.get(id);
+    update($item) {
+      let id = this.findID($item),
+        item = this.get(id);
 
-      updateItem.name = this.findChildByAttributeValue(
-        item,
+      item.name = this.findChildByAttributeValue(
+        $item,
         "[name^=item_name]"
       ).value;
+      // item.name = $item.find("[name^=item_name]").val();
 
-      updateItem.stock_number = this.findChildByAttributeValue(
-        item,
+      item.stock_number = this.findChildByAttributeValue(
+        $item,
         "[name^=item_stock_number]"
       ).value;
-
-      updateItem.quantity = this.findChildByAttributeValue(
-        item,
-        "[name^=item_quantity]"
-      ).value;
+      // item.stock_number = $item.find("[name^=item_stock_number]").val();
+      item.quantity = $item.find("[name^=item_quantity]").val();
     },
     newItem(e) {
       e.preventDefault();

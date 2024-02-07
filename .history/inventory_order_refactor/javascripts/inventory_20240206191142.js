@@ -61,19 +61,19 @@ var inventory;
     },
     update(item) {
       let id = this.findID(item),
-        updateItem = this.get(id);
+        item = this.get(id);
 
-      updateItem.name = this.findChildByAttributeValue(
+      item.name = this.findChildByAttributeValue(
         item,
         "[name^=item_name]"
       ).value;
 
-      updateItem.stock_number = this.findChildByAttributeValue(
+      item.stock_number = this.findChildByAttributeValue(
         item,
         "[name^=item_stock_number]"
       ).value;
 
-      updateItem.quantity = this.findChildByAttributeValue(
+      item.quantity = this.findChildByAttributeValue(
         item,
         "[name^=item_quantity]"
       ).value;
