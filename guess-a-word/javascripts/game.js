@@ -18,11 +18,6 @@
     }
 
     bindEventListeners(_) {
-      function userGuess(event) {
-        event.preventDefault();
-        game.userGuess(event.key);
-      }
-
       document.addEventListener("keyup", game.userGuess);
       game.newGameLink.addEventListener("click", game.newGame);
       game.newGameLink.dispatchEvent(new MouseEvent("click"));
