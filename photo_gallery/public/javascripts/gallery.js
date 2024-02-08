@@ -62,17 +62,22 @@
       try {
         await this.updatePhotosJSON();
         let imageHTML = this.photosTemplate({ photos: this.photosJSON });
-        console.log(imageHTML);
         slides.innerHTML = imageHTML;
+        this.renderPhotoInfo(id);
       } catch (error) {
         console.error(error.message);
       }
+    }
+
+    renderPhotoInfo(id) {
+      let photoInfoHTML = this.photoInfoTemplate(this.photosJSON[id]);
+      photoInfoHeader.innerHTML = photoInfoHTML;
     }
   }
 
   let photosTemplate,
     commentsTemplate,
-    photoInfo,
+    photoInfoHeader,
     browserGallery,
     slides,
     comments;
@@ -80,5 +85,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     browserGallery = new Gallery();
     slides = document.querySelector("#slides");
+    photoInfoHeader = document.querySelector("section header");
   });
 })();
