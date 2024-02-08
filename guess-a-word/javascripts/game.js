@@ -11,9 +11,8 @@
       this.unusedWords = [...WORD_BANK];
       this.chosenWord = null;
       this.triesRemaining = null;
-      this.previousGuesses = [];
+      this.previousGuesses = null;
 
-      NEW_GAME_LINK.hidden = true;
       this.newGame();
     }
 
@@ -23,6 +22,7 @@
     }
 
     newGame() {
+      NEW_GAME_LINK.hidden = true;
       this.chosenWord = this.randomWord();
       // console.log(this.chosenWord); // dev option
       if (this.chosenWord === undefined) {
