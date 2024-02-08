@@ -1,5 +1,11 @@
 (function () {
   const WORD_BANK = ["apple", "banana", "orange", "pear"];
+  const NEW_GAME_LINK = document.querySelector("#replay");
+  const APPLES = document.querySelector("#apples");
+  const MESSAGE = document.querySelector("#message");
+  const SPACES = document.querySelector("#spaces");
+  const GUESSES = document.querySelector("#guesses");
+
   class GuessWord {
     constructor() {
       this.unusedWords = [...WORD_BANK];
@@ -7,20 +13,8 @@
       this.triesRemaining = null;
       this.previousGuesses = [];
 
-      this.apples = document.querySelector("#apples");
-      this.message = document.querySelector("#message");
-      this.spaces = document.querySelector("#spaces");
-      this.guesses = document.querySelector("#guesses");
-      this.newGameLink = document.querySelector("#replay");
-      this.newGameLink.hidden = true;
-
-      document.addEventListener("DOMContentLoaded", this.bindEventListeners);
-    }
-
-    bindEventListeners(_) {
-      document.addEventListener("keyup", game.userGuess);
-      game.newGameLink.addEventListener("click", game.newGame);
-      game.newGameLink.dispatchEvent(new MouseEvent("click"));
+      NEW_GAME_LINK.hidden = true;
+      this.newGame();
     }
 
     randomWord() {
@@ -28,28 +22,27 @@
       return this.unusedWords.splice(wordIndex, 1)[0];
     }
 
-    newGame(event) {
-      event.preventDefault();
-      game.chosenWord = game.randomWord();
-      console.log(game.chosenWord);
-      if (game.chosenWord === undefined) {
-        game.wordsExhausted();
+    newGame() {
+      this.chosenWord = this.randomWord();
+      // console.log(this.chosenWord); // dev option
+      if (this.chosenWord === undefined) {
+        this.wordsExhausted();
       } else {
-        game.clearLetters();
-        game.generateSpaces();
+        this.clearLetters();
+        this.generateSpaces();
         ["lose", "win"].forEach((attribute) =>
           document.body.classList.remove(attribute)
         );
-        game.apples.className = "";
+        APPLES.className = "";
 
-        game.newGameLink.hidden = true;
-        game.triesRemaining = 6;
-        game.previousGuesses = [];
+        NEW_GAME_LINK.hidden = true;
+        this.triesRemaining = 6;
+        this.previousGuesses = [];
       }
     }
 
     clearLetters() {
-      [...this.spaces.children, ...this.guesses.children].forEach((child) => {
+      [...SPACES.children, ...GUESSES.children].forEach((child) => {
         if (child.tagName === "SPAN") child.remove();
       });
     }
@@ -57,21 +50,23 @@
     generateSpaces() {
       for (let i = 0; i < this.chosenWord.length; i++) {
         let space = document.createElement("span");
-        this.spaces.appendChild(space);
+        SPACES.appendChild(space);
       }
     }
 
     wordsExhausted() {
-      this.message.textContent = "Sorry, I've run out of words!";
-      this.newGameLink.hidden = true;
+      MESSAGE.textContent = "Sorry, I've run out of words!";
+      NEW_GAME_LINK.hidden = true;
     }
 
-    userGuess(event) {
-      event.preventDefault();
-      let guessAttempt = event.key.toLowerCase();
+    userGuess(guessAttempt) {
+      guessAttempt = guessAttempt.toLowerCase();
 
       if (guessAttempt.length > 1) return;
+      if (!guessAttempt.match(/[a-z]/)) return;
       if (game.previousGuesses.includes(guessAttempt)) return;
+      if (game.gameWon() || game.gameLost()) return;
+
       game.previousGuesses.push(guessAttempt);
 
       if (game.chosenWord.match(guessAttempt)) {
@@ -79,24 +74,28 @@
       } else {
         game.letterNotMatched(guessAttempt);
       }
+    }
 
-      console.log(game.triesRemaining);
+    gameWon() {
+      return [...SPACES.children].every((span) => span.innerText.length > 0);
+    }
+
+    gameLost() {
+      return this.triesRemaining < 1;
     }
 
     letterMatched(guessAttempt) {
       let span = document.createElement("span");
       span.textContent = guessAttempt.toUpperCase();
-      this.guesses.appendChild(span);
+      GUESSES.appendChild(span);
 
       [...this.chosenWord].forEach((letter, index) => {
         if (letter === guessAttempt) {
-          this.spaces.children[index + 1].textContent = letter.toUpperCase();
+          SPACES.children[index + 1].textContent = letter.toUpperCase();
         }
       });
-      console.log([...this.spaces.children].map((child) => child.innerText));
-      if (
-        [...this.spaces.children].every((span) => span.innerText.length > 0)
-      ) {
+
+      if (this.gameWon()) {
         this.userWin();
       }
     }
@@ -104,23 +103,36 @@
     letterNotMatched(guessAttempt) {
       let span = document.createElement("span");
       span.textContent = guessAttempt.toUpperCase();
-      this.guesses.appendChild(span);
+      GUESSES.appendChild(span);
       this.triesRemaining -= 1;
-      this.apples.className = `guess_${6 - this.triesRemaining}`;
+      APPLES.className = `guess_${6 - this.triesRemaining}`;
 
       if (this.triesRemaining < 1) this.userLose();
     }
 
     userWin() {
-      this.newGameLink.hidden = false;
+      NEW_GAME_LINK.hidden = false;
       document.body.classList.add("win");
     }
 
     userLose() {
-      this.newGameLink.hidden = false;
+      NEW_GAME_LINK.hidden = false;
       document.body.classList.add("lose");
     }
   }
 
   const game = new GuessWord();
+  document.addEventListener("DOMContentLoaded", bindEventListeners);
+
+  function bindEventListeners(_) {
+    document.addEventListener("keyup", (event) => {
+      event.preventDefault();
+      game.userGuess(event.key);
+    });
+
+    NEW_GAME_LINK.addEventListener("click", (event) => {
+      event.preventDefault();
+      game.newGame();
+    });
+  }
 })();
