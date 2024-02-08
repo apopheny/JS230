@@ -24,18 +24,18 @@
 
     async returnPhotosJSON() {
       try {
-        const response = await fetch("./photos/", {
+        const request = await fetch("./photos/", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
 
-        if (!response.ok) {
+        if (!request.ok) {
           throw new Error(
-            `Error retrieving photos. Request status: ${response.status}`
+            `Error retrieving photos. Request status: ${request.status}`
           );
         }
 
-        const data = await response.json();
+        const data = await request.json();
         return data;
       } catch (error) {
         throw error;
@@ -58,12 +58,13 @@
       );
     }
 
-    async renderPhoto(id = 0) {
+    async renderPhoto(id = 1) {
       try {
         await this.updatePhotosJSON();
         let imageHTML = this.photosTemplate({ photos: this.photosJSON });
         slides.innerHTML = imageHTML;
         this.renderPhotoInfo(id);
+        this.renderComments(id);
       } catch (error) {
         console.error(error.message);
       }
@@ -73,18 +74,38 @@
       let photoInfoHTML = this.photoInfoTemplate(this.photosJSON[id]);
       photoInfoHeader.innerHTML = photoInfoHTML;
     }
+
+    async renderComments(id) {
+      try {
+        let request = await fetch(`./comments?photo_id=${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!request.ok) {
+          throw new Error(
+            `Failed to load photo comments. Status: ${request.status}`
+          );
+        }
+
+        let data = await request.json();
+
+        let commentsHTML = this.commentsTemplate({ comments: data });
+        commentsDiv.innerHTML = commentsHTML;
+      } catch (error) {
+        throw error;
+      }
+    }
   }
 
-  let photosTemplate,
-    commentsTemplate,
-    photoInfoHeader,
-    browserGallery,
-    slides,
-    comments;
+  let photoInfoHeader, browserGallery, slides, commentsDiv;
 
   document.addEventListener("DOMContentLoaded", () => {
     browserGallery = new Gallery();
     slides = document.querySelector("#slides");
     photoInfoHeader = document.querySelector("section header");
+    commentsDiv = document.querySelector("#comments");
   });
 })();
