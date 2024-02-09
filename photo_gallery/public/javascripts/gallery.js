@@ -182,6 +182,43 @@
       currentButton.innerText = buttontext;
     }
 
+    async submitComment() {
+      // body, name, photo_id, email
+      try {
+        let id = slides.firstElementChild.getAttribute("data-id");
+        let form = new FormData(commentsForm);
+        form.append("photo_id", id);
+        const json = Object.fromEntries([...form.entries()]);
+
+        let request = await fetch("./comments/new", {
+          method: "POST",
+          body: JSON.stringify(json),
+          accept: "application/json",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!request.ok) {
+          throw new Error(
+            `Form post request failed. Status: ${request.status}`
+          );
+        }
+
+        commentsForm.reset();
+        let response = await request.json();
+        this.addNewComment(response);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    addNewComment(body) {
+      console.log(body);
+      let newComment = this.commentsTemplate({ comments: [body] });
+      commentsList.insertAdjacentHTML("beforeend", newComment);
+    }
+
     cyclePrevious() {
       let lastFigure = [...slides.children];
       lastFigure = lastFigure[lastFigure.length - 1];
@@ -213,6 +250,11 @@
         event.preventDefault();
         browserGallery.cycleNext();
       });
+
+      commentsForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        browserGallery.submitComment();
+      });
     }
   }
 
@@ -223,7 +265,8 @@
     prevArrow,
     nextArrow,
     likeButton,
-    favoriteButton;
+    favoriteButton,
+    commentsForm;
 
   document.addEventListener("DOMContentLoaded", () => {
     slides = document.querySelector("#slides");
@@ -231,6 +274,7 @@
     commentsList = document.querySelector("#comments ul");
     prevArrow = document.querySelector(".prev");
     nextArrow = document.querySelector(".next");
+    commentsForm = document.querySelector("form");
 
     browserGallery = new Gallery();
   });
