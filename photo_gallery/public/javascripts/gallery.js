@@ -94,10 +94,92 @@
 
         let data = await request.json();
         let commentsHTML = this.commentsTemplate({ comments: data });
-        commentsDiv.innerHTML = commentsHTML;
+        commentsList.innerHTML = commentsHTML;
+
+        this.fetchNewButtons();
       } catch (error) {
         throw error;
       }
+    }
+
+    fetchNewButtons() {
+      if ([likeButton, favoriteButton].every((ele) => !!ele)) {
+        likeButton.removeEventListener("click", this.likeButtonEventListener);
+        favoriteButton.removeEventListener(
+          "click",
+          this.favoriteButtonEventListener
+        );
+      }
+
+      likeButton = document.querySelector(".button.like");
+      favoriteButton = document.querySelector(".button.favorite");
+
+      this.bindButtonListeners();
+    }
+
+    likeButtonEventListener(event) {
+      event.preventDefault();
+      browserGallery.postLikesFavorites("like");
+    }
+
+    favoriteButtonEventListener(event) {
+      event.preventDefault();
+      browserGallery.postLikesFavorites("favorite");
+    }
+
+    bindButtonListeners() {
+      likeButton.addEventListener("click", this.likeButtonEventListener);
+
+      favoriteButton.addEventListener(
+        "click",
+        this.favoriteButtonEventListener
+      );
+    }
+
+    async postLikesFavorites(property) {
+      try {
+        this.fetchNewButtons();
+        let buttonId = likeButton.getAttribute("data-id");
+        let body = JSON.stringify({ photo_id: buttonId });
+
+        let request = await fetch(`./photos/${property}`, {
+          method: "POST",
+          accept: "application/json",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body,
+        });
+
+        if (!request.ok) {
+          throw new Error(
+            `Failed to post ${property}. Status: ${request.status}`
+          );
+        }
+
+        let response = await request.json();
+        this.updateButtons(property, response);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    updateButtons(button, count) {
+      let buttontext;
+      let currentButton;
+      switch (button) {
+        case "like":
+          currentButton = likeButton;
+          buttontext = likeButton.innerText;
+          break;
+        case "favorite":
+          currentButton = favoriteButton;
+          buttontext = favoriteButton.innerText;
+          break;
+      }
+
+      buttontext = buttontext.replace(/\d+/, count.total);
+      currentButton.innerText = buttontext;
     }
 
     cyclePrevious() {
@@ -106,6 +188,8 @@
 
       slides.insertAdjacentElement("afterbegin", lastFigure);
       let currentPhotoID = slides.firstElementChild.getAttribute("data-id");
+
+      this.updatePhotosJSON();
       this.renderPhotoInfo(currentPhotoID);
       this.renderComments(currentPhotoID);
     }
@@ -114,6 +198,7 @@
       slides.insertAdjacentElement("beforeend", slides.firstElementChild);
       let currentPhotoID = slides.firstElementChild.getAttribute("data-id");
 
+      this.updatePhotosJSON();
       this.renderPhotoInfo(currentPhotoID);
       this.renderComments(currentPhotoID);
     }
@@ -134,16 +219,19 @@
   let photoInfoHeader,
     browserGallery,
     slides,
-    commentsDiv,
+    commentsList,
     prevArrow,
-    nextArrow;
+    nextArrow,
+    likeButton,
+    favoriteButton;
 
   document.addEventListener("DOMContentLoaded", () => {
     slides = document.querySelector("#slides");
     photoInfoHeader = document.querySelector("section header");
-    commentsDiv = document.querySelector("#comments");
+    commentsList = document.querySelector("#comments ul");
     prevArrow = document.querySelector(".prev");
     nextArrow = document.querySelector(".next");
+
     browserGallery = new Gallery();
   });
 })();
