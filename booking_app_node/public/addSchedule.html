@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Schedules</title>
+  </head>
+  <body>
+    <header>
+      <h1>Add New Staff Member</h1>
+    </header>
+    <main id="main">
+
+    <script id="schedulingTemplate" type="text/x-handlebars-template">
+      <form action="/api/schedules" method="post" id="schedulesForm_{{count}}">
+        <div id="staffFormInputs">
+          <div>
+            <label for="staffNames">Staff name:</label>
+            <select name="staffNames" id="staffNames">
+              {{#each data}}
+                {{> staffDropdownPartial}}
+              {{/each}}
+            </select>
+          </div>
+        </div>
+        <div id="staffFormSubmit">
+          <input type="submit" value="Submit" />
+        </div>
+      </form>
+    </script>
+
+    <script id="staffDropdownPartial" type="text/x-handlebars-template">
+        <option value="{{this.name}}" id="{{this.id}}">{{this.name}}</option>
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script src="/javascripts/addSchedule.js"></script>
+  </body>
+</html>
