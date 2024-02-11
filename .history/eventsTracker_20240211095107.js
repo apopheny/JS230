@@ -38,7 +38,7 @@ tracker.elements()[0] === document.querySelector('#blue')
 true
 tracker.elements()[3] === document.querySelector('#green')
 true
-Insights: Function keeps a list of elements on which there are listeners. This should only be accessed as an interface method
+Insights: Function keeps a list of elements on which there are listeners
 
 tracker.list()[0]
 click { target: div#blue, buttons: 0, clientX: 195, clientY: 190, layerX: 195, layerY: 190 }
@@ -58,105 +58,14 @@ Other insights: The events are not passed into the function we are implementing.
 
 Approach
 - Use a class-based structure for private data and easy instantiation
-  - This isn't going to work as the examples invoke a function named `track` and pass the callback in
 - Attach a click event listener to document in order to capture all events as they bubble up
 - When fired, this event listener should push this event to its list property, and push the event.target to its elements property
 - The clear method should reset these two properties
 
 */
 
-function track(callback, metaListener = tracker) {
-  return function (event) {
-    metaListener.addEvent(event);
-    metaListener.addElement(event.target);
-
-    callback(event);
-  };
-}
-
-class EventTracker {
-  #eventList;
-  #elementsList;
-
-  constructor() {
-    this.clear();
+document.addEventListener("DOMContentLoaded", () => {
+  class EventTracker {
+    static #list = [];
   }
-
-  addEvent(event) {
-    if (!this.#eventList.includes(event)) this.#eventList.push(event);
-  }
-
-  addElement(element) {
-    if (!this.#elementsList.includes(element)) this.#elementsList.push(element);
-  }
-
-  clear() {
-    this.#elementsList = [];
-    this.#eventList = [];
-    return Math.max(this.#eventList.length, this.#elementsList.length);
-  }
-
-  list() {
-    return this.#eventList.slice();
-  }
-
-  elements() {
-    return this.#elementsList.slice();
-  }
-}
-
-let tracker = new EventTracker();
-const divRed = document.querySelector("#red");
-const divBlue = document.querySelector("#blue");
-const divOrange = document.querySelector("#orange");
-const divGreen = document.querySelector("#green");
-
-divRed.addEventListener(
-  "click",
-  track((event) => {
-    document.body.style.background = "red";
-  })
-);
-
-divBlue.addEventListener(
-  "click",
-  track((event) => {
-    event.stopPropagation();
-    document.body.style.background = "blue";
-  })
-);
-
-divOrange.addEventListener(
-  "click",
-  track((event) => {
-    document.body.style.background = "orange";
-  })
-);
-
-divGreen.addEventListener(
-  "click",
-  track((event) => {
-    document.body.style.background = "green";
-  })
-);
-
-function test() {
-  console.log(tracker.list().length === 4);
-  // 4
-  console.log(tracker.elements());
-  // [div#blue, div#red, div#orange, div#green]
-  console.log(tracker.elements()[0] === document.querySelector("#blue"));
-  // true
-  console.log(tracker.elements()[3] === document.querySelector("#green"));
-  // true
-  console.log(tracker.list()[0]);
-  // click { target: div#blue, buttons: 0, clientX: 195, clientY: 190, layerX: 195, layerY: 190 }
-  //  The event listed in `tracker` can differ by browser (Chrome - PointerEvent, Firefox - click)
-  console.log(tracker.clear() === 0);
-  // 0
-  console.log(tracker.list());
-  // []
-  console.log((tracker.list()[0] = "abc"));
-  console.log(tracker.list().length === 0);
-  // 0
-}
+});

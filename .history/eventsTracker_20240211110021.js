@@ -65,98 +65,78 @@ Approach
 
 */
 
-function track(callback, metaListener = tracker) {
-  return function (event) {
-    metaListener.addEvent(event);
-    metaListener.addElement(event.target);
+document.addEventListener("DOMContentLoaded", () => {
+  function track(callback, metaListener = tracker) {
+    return function (event) {
+      metaListener.addEvent(event);
+      metaListener.addElement(event.target);
 
-    callback(event);
-  };
-}
-
-class EventTracker {
-  #eventList;
-  #elementsList;
-
-  constructor() {
-    this.clear();
+      callback(event);
+    };
   }
 
-  addEvent(event) {
-    if (!this.#eventList.includes(event)) this.#eventList.push(event);
+  class EventTracker {
+    #eventList;
+    #elementsList;
+
+    constructor() {
+      this.clear();
+    }
+
+    addEvent(event) {
+      this.#eventList.push(event);
+    }
+
+    addElement(element) {
+      this.#elementsList.push(element);
+    }
+
+    clear() {
+      this.#elementsList = [];
+      this.#eventList = [];
+    }
+
+    list() {
+      return this.#eventList.slice();
+    }
+
+    elements() {
+      return this.#elementsList.slice();
+    }
   }
 
-  addElement(element) {
-    if (!this.#elementsList.includes(element)) this.#elementsList.push(element);
-  }
+  let tracker = new EventTracker();
+  const divRed = document.querySelector("#red");
+  const divBlue = document.querySelector("#blue");
+  const divOrange = document.querySelector("#orange");
+  const divGreen = document.querySelector("#green");
 
-  clear() {
-    this.#elementsList = [];
-    this.#eventList = [];
-    return Math.max(this.#eventList.length, this.#elementsList.length);
-  }
+  divRed.addEventListener(
+    "click",
+    track((event) => {
+      document.body.style.background = "red";
+    })
+  );
 
-  list() {
-    return this.#eventList.slice();
-  }
+  divBlue.addEventListener(
+    "click",
+    track((event) => {
+      event.stopPropagation();
+      document.body.style.background = "blue";
+    })
+  );
 
-  elements() {
-    return this.#elementsList.slice();
-  }
-}
+  divOrange.addEventListener(
+    "click",
+    track((event) => {
+      document.body.style.background = "orange";
+    })
+  );
 
-let tracker = new EventTracker();
-const divRed = document.querySelector("#red");
-const divBlue = document.querySelector("#blue");
-const divOrange = document.querySelector("#orange");
-const divGreen = document.querySelector("#green");
-
-divRed.addEventListener(
-  "click",
-  track((event) => {
-    document.body.style.background = "red";
-  })
-);
-
-divBlue.addEventListener(
-  "click",
-  track((event) => {
-    event.stopPropagation();
-    document.body.style.background = "blue";
-  })
-);
-
-divOrange.addEventListener(
-  "click",
-  track((event) => {
-    document.body.style.background = "orange";
-  })
-);
-
-divGreen.addEventListener(
-  "click",
-  track((event) => {
-    document.body.style.background = "green";
-  })
-);
-
-function test() {
-  console.log(tracker.list().length === 4);
-  // 4
-  console.log(tracker.elements());
-  // [div#blue, div#red, div#orange, div#green]
-  console.log(tracker.elements()[0] === document.querySelector("#blue"));
-  // true
-  console.log(tracker.elements()[3] === document.querySelector("#green"));
-  // true
-  console.log(tracker.list()[0]);
-  // click { target: div#blue, buttons: 0, clientX: 195, clientY: 190, layerX: 195, layerY: 190 }
-  //  The event listed in `tracker` can differ by browser (Chrome - PointerEvent, Firefox - click)
-  console.log(tracker.clear() === 0);
-  // 0
-  console.log(tracker.list());
-  // []
-  console.log((tracker.list()[0] = "abc"));
-  console.log(tracker.list().length === 0);
-  // 0
-}
+  divGreen.addEventListener(
+    "click",
+    track((event) => {
+      document.body.style.background = "green";
+    })
+  );
+});

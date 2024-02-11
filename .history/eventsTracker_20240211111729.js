@@ -141,22 +141,22 @@ divGreen.addEventListener(
 );
 
 function test() {
-  console.log(tracker.list().length === 4);
+  tracker.list().length === 4;
   // 4
-  console.log(tracker.elements());
+  tracker.elements();
   // [div#blue, div#red, div#orange, div#green]
-  console.log(tracker.elements()[0] === document.querySelector("#blue"));
+  tracker.elements()[0] === document.querySelector("#blue");
   // true
-  console.log(tracker.elements()[3] === document.querySelector("#green"));
+  tracker.elements()[3] === document.querySelector("#green");
   // true
-  console.log(tracker.list()[0]);
+  tracker.list()[0];
   // click { target: div#blue, buttons: 0, clientX: 195, clientY: 190, layerX: 195, layerY: 190 }
   //  The event listed in `tracker` can differ by browser (Chrome - PointerEvent, Firefox - click)
-  console.log(tracker.clear() === 0);
+  tracker.clear() === 0;
   // 0
-  console.log(tracker.list());
+  tracker.list();
   // []
-  console.log((tracker.list()[0] = "abc"));
-  console.log(tracker.list().length === 0);
+  tracker.list()[0] = "abc";
+  tracker.list().length === 0;
   // 0
 }
