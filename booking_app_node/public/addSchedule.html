@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <title>Add Schedules</title>
   </head>
   <body>
@@ -10,6 +11,7 @@
       <h1>Add New Staff Member</h1>
     </header>
     <main id="main">
+    <button id="newSchedule" >Add more schedules</button>
 
     <script id="schedulingTemplate" type="text/x-handlebars-template">
       <form action="/api/schedules" method="post" id="schedulesForm_{{count}}">
@@ -17,21 +19,47 @@
           <div>
             <label for="staffNames">Staff name:</label>
             <select name="staffNames" id="staffNames">
+              <option value="Staff Member" id="0">Staff Member</option>
               {{#each data}}
                 {{> staffDropdownPartial}}
               {{/each}}
             </select>
           </div>
-        </div>
-        <div id="staffFormSubmit">
-          <input type="submit" value="Submit" />
+          <div>
+            <label for="date">Date:</label>
+            <select name="staffDates" id="staffDates">
+              <option value="Date" id="0">Date</option>
+              {{#each data}}
+                {{> staffDatesPartial}}
+              {{/each}}
+            </select>
+          </div>
+          <div>
+            <label for="time">Time:</label>
+            <select name="staffDates" id="staffDates">
+              <option value="Time" id="0">Time</option>
+              {{#each data}}
+                {{> staffDatesPartial}}
+              {{/each}}
+            </select>
+          </div>
         </div>
       </form>
     </script>
+    <button id="scheduleSubmit" >Submit</button>
 
     <script id="staffDropdownPartial" type="text/x-handlebars-template">
         <option value="{{this.name}}" id="{{this.id}}">{{this.name}}</option>
     </script>
+
+    <script id="staffDatePartial" type="text/x-handlebars-template">
+        <option value="{{this.date}}" id="{{this.staff_id}}">{{this.date}}</option>
+    </script>
+
+    <script id="staffTimePartial" type="text/x-handlebars-template">
+        <option value="{{this.time}}" id="{{this.staff_id}}">{{this.time}}</option>
+    </script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script src="/javascripts/addSchedule.js"></script>
