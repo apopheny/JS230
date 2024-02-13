@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="validation.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <main>
+      <form action="" method="" novalidate>
+        <label for="first-name">First name:</label>
+        <input
+          type="text"
+          id="first-name"
+          name="first-name"
+          placeholder="first name"
+        />
+        <div class="hidden-error-message">Error: first name required</div>
+
+        <label for="last-name">Last name:</label>
+        <input
+          type="text"
+          id="last-name"
+          name="last-name"
+          placeholder="last name"
+        />
+        <div class="hidden-error-message">Error: last name required</div>
+
+        <label for="email">Email:</label>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="email address"
+        />
+        <div class="hidden-error-message">Error: Invalid email address</div>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" />
+        <div class="hidden-error-message">
+          Error: password must be 10 or more characters
+        </div>
+
+        <label for="phone-number">Phone number (optional):</label>
+        <input
+          type="text"
+          id="phone-number"
+          name="phone-number"
+          placeholder="Phone number"
+        />
+        <div class="hidden-error-message">
+          Error: phone number must be formatted as 111-111-1111
+        </div>
+
+        <input type="submit" value="Sign Up" class="submit" />
+      </form>
+    </main>
+    <script src="validation.js"></script>
+  </body>
+</html>
