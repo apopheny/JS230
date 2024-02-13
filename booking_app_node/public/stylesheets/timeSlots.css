@@ -4,3 +4,12 @@ input {
   margin-top: 0.33vh;
   margin-bottom: 0.33vh;
 }
+
+h1,
+#new-student-form {
+  background-color: grey;
+}
+
+.disabled {
+  background-color: transparent;
+}

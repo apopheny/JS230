@@ -9,7 +9,10 @@
 
     <script id="scheduleDropownTemplate" type="text/x-handlebars-template">
       {{#each schedule}}
-        <option value="{{schedule.id}}" data-schedule="{{this.id}}">
+        <option
+          value="{{this.staff_id}}_{{this.date}}_{{this.time}}_{{this.id}}"
+          data-schedule="{{this.id}}"
+        >
           {{this.name}}
           |
           {{this.date}}
@@ -17,6 +20,40 @@
           {{this.time}}
         </option>
       {{/each}}
+    </script>
+
+    <script id="newStudentTemplate" type="text/x-handlebars-template">
+      <h1>Please provide new student details</h1>
+      <form action="" method="" id="new-student-form">
+        <div>
+          <label for="new-student-email-input">Email:</label>
+          <input
+            type="text"
+            id="new-student-email-input"
+            name="new-student-email-input"
+            value="{{email}}"
+          />
+        </div>
+        <div>
+          <label for="new-student-name-input">Name:</label>
+          <input
+            type="text"
+            id="new-student-name-input"
+            name="new-student-name-input"
+            placeholder="Please enter your name"
+          />
+        </div>
+        <div>
+          <label for="new-student-booking-sequence">Booking Sequence:</label>
+          <input
+            type="text"
+            id="new-student-booking-sequence"
+            name="new-student-booking-sequence"
+            value="{{sequence}}"
+          />
+          <input type="submit" value="Submit" class="submit" />
+        </div>
+      </form>
     </script>
   </head>
   <body>
@@ -29,9 +66,9 @@
           </select>
         </div>
         <div>
-          <label <label for="email-input">Email:</label>
+          <label for="email-input">Email:</label>
           <input type="text" id="email-input" name="email-input" />
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Submit" class="submit" />
         </div>
       </form>
     </main>
