@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
   let scheduleSubmitForm = document.querySelector("#schedule-submit");
-  let scheduleDropdown = document.querySelector("#schedule-dropdown");
+  let scheduleDropdown = document.getElementById("schedule-dropdown");
   let scheduleEmailInput = document.querySelector("#email-input");
 
-  let scheduleDropdownRenderer = document.querySelector(
-    "#scheduleDropownTemplate"
-  ).innerHTML;
+  let scheduleDropdownRenderer = Handlebars.compile(
+    document.querySelector("#scheduleDropownTemplate").innerHTML
+  );
 
   async function getAvailableSchedules() {
     try {
@@ -52,11 +52,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function parseStaffSchedules() {
     try {
-      return Promise.all([getAvailableSchedules(), getStaff()]);
+      let [schedule, staff] = await Promise.all([
+        getAvailableSchedules(),
+        getStaff(),
+      ]);
+
+      schedule.forEach((schedule) => {
+        schedule.name = staff.find((ele) => ele.id === schedule.staff_id).name;
+      });
+      console.log(schedule);
+      return { schedule };
     } catch (error) {
-      throw Error;
+      throw error;
     }
   }
 
-  parseStaffSchedules().then(console.log);
+  async function renderDropdown(event) {
+    console.log(event.target.parentElement.children.length);
+    if (scheduleDropdown.children.length > 1) return;
+    try {
+      let html = await parseStaffSchedules();
+      html = scheduleDropdownRenderer(html);
+      scheduleDropdown.insertAdjacentHTML("beforeend", html);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  scheduleDropdown.addEventListener("click", renderDropdown);
 });

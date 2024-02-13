@@ -8,11 +8,15 @@
     <title>Document</title>
 
     <script id="scheduleDropownTemplate" type="text/x-handlebars-template">
-      {{#each this}}
-        <option value="{{this.id}}">
-          {{this.name}} | {{this.date}} | {{this.time}}
+      {{#each schedule}}
+        <option value="{{schedule.id}}" data-schedule="{{this.id}}">
+          {{this.name}}
+          |
+          {{this.date}}
+          |
+          {{this.time}}
         </option>
-      {{each}}
+      {{/each}}
     </script>
   </head>
   <body>
