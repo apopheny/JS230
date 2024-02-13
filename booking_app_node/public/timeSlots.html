@@ -3,9 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/timeSlots.css" />
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <title>Document</title>
+
+    <script id="scheduleDropownTemplate" type="text/x-handlebars-template">
+      {{#each this}}
+        <option value="{{this.id}}">
+          {{this.name}} | {{this.date}} | {{this.time}}
+        </option>
+      {{each}}
+    </script>
   </head>
   <body>
-    <script src="./javascripts/timeSlots.js"></script>
+    <main>
+      <form action="" method="" id="schedule-submit">
+        <div>
+          <label for="schedule-dropdown">Please select one schedule</label>
+          <select id="schedule-dropdown" name="schedule-dropdown">
+            <option value="Click here">Click here</option>
+          </select>
+        </div>
+        <div>
+          <label <label for="email-input">Email:</label>
+          <input type="text" id="email-input" name="email-input" />
+          <input type="submit" value="Submit" />
+        </div>
+      </form>
+    </main>
+
+    <script src="/javascripts/timeSlots.js"></script>
   </body>
 </html>
