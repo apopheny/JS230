@@ -6,13 +6,38 @@ document.addEventListener("DOMContentLoaded", () => {
   let password = document.getElementById("password");
   let phone = document.getElementById("phone-number");
   let submitButton = document.querySelector(".submit");
+  let cc1 = document.getElementById("credit-card-1");
+  let cc2 = document.getElementById("credit-card-2");
+  let cc3 = document.getElementById("credit-card-3");
+  let cc4 = document.getElementById("credit-card-4");
+  const DATA_FIELDS = [
+    firstName,
+    lastName,
+    email,
+    password,
+    phone,
+    cc1,
+    cc2,
+    cc3,
+    cc4,
+  ];
+
+  const UTILITY_KEYS = [
+    "Tab",
+    "Enter",
+    `Escape`,
+    "Backspace",
+    "Delete",
+    "ArrowLeft",
+    "ArrowRight",
+  ];
 
   [firstName, lastName].forEach((element) =>
     element.addEventListener("keydown", validateNameChars)
   );
 
   function validateNameChars(event) {
-    if (!event.key.match(/[a-z]/i)) {
+    if (!event.key.match(/[a-z]/i) && !UTILITY_KEYS.includes(event.key)) {
       event.preventDefault();
       displayErrorMessage(returnNextErrorElement(event.target), {
         message: "Names must consist only of letters",
@@ -23,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
   phone.addEventListener("keydown", validatePhoneChars);
 
   function validatePhoneChars(event) {
-    if (!event.key.match(/([0-9]|-)/)) {
+    if (!event.key.match(/([0-9]|-)/) && !UTILITY_KEYS.includes(event.key)) {
       event.preventDefault();
       displayErrorMessage(returnNextErrorElement(event.target), {
         message:
@@ -37,16 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   function validateCreditChars(event) {
-    const UTILITY_KEYS = [
-      "Tab",
-      "Enter",
-      `Escape`,
-      "Backspace",
-      "Delete",
-      "ArrowLeft",
-      "ArrowRight",
-    ];
-
     if (!event.key.match(/[0-9]/) && !UTILITY_KEYS.includes(event.key)) {
       event.preventDefault();
       displayErrorMessage(returnNextErrorElement(event.target), {
@@ -54,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
     if (event.target.value.length >= 4) {
+      event.preventDefault();
       if (event.target.nextElementSibling.className === "credit-field") {
         console.log(event.target.nextElementSibling);
         event.target.nextElementSibling.focus();
@@ -213,11 +229,30 @@ document.addEventListener("DOMContentLoaded", () => {
     return validation;
   }
 
+  function createSerializationBlock() {
+    let block = document.createElement("block");
+    block.id = "json-serialization-block";
+    document.querySelector("main").insertAdjacentElement("afterend", block);
+  }
+
+  function serializeForm() {
+    let info = DATA_FIELDS.slice(0, DATA_FIELDS.length - 4);
+    let creditInfo = DATA_FIELDS.slice(DATA_FIELDS.length - 4);
+
+    let infoString = info
+      .map((ele) => `${ele.id}=${encodeURIComponent(ele.value)}`)
+      .join("&");
+    let creditString = creditInfo.map((ele) => ele.value).join("");
+
+    let queryString = infoString + `&credit-card=${creditString}`;
+    return queryString;
+  }
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-
+    serializeForm();
     if (
-      [firstName, lastName, email, password, phone].some((ele) => {
+      DATA_FIELDS.some((ele) => {
         return fieldValidator(ele).status === false;
       })
     ) {
@@ -227,6 +262,10 @@ document.addEventListener("DOMContentLoaded", () => {
       error.innerText = "Please correct errors before submission";
       document.querySelector("main").insertAdjacentElement("afterbegin", error);
       submitToggle();
+    } else {
+      createSerializationBlock();
+      document.getElementById("json-serialization-block").innerText =
+        serializeForm();
     }
   });
 });
