@@ -7,37 +7,106 @@ document.addEventListener("DOMContentLoaded", () => {
   let phone = document.getElementById("phone-number");
   let submitButton = document.querySelector(".submit");
 
+  [firstName, lastName].forEach((element) =>
+    element.addEventListener("keyup", validateNameChars)
+  );
+
+  function validateNameChars(event) {
+    event.preventDefault();
+    if (!event.key.match(/[a-z]/i)) {
+      displayErrorMessage(returnNextErrorElement(event.target), {
+        message: "Names must consist only of letters",
+      });
+    }
+  }
+
+  phone.addEventListener("keyup", validatePhoneChars);
+
+  function validatePhoneChars(event) {
+    event.preventDefault();
+    if (!event.key.match(/([0-9]|-)/)) {
+      displayErrorMessage(returnNextErrorElement(event.target), {
+        message:
+          "Optional phone number must consist only of numbers and dashes",
+      });
+    }
+  }
+
+  [...document.querySelectorAll('[id^="credit-card"]')].forEach((element) =>
+    element.addEventListener("keyup", validateCreditChars)
+  );
+
+  function validateCreditChars(event) {
+    event.preventDefault();
+    if (!event.key.match(/[0-9]/)) {
+      displayErrorMessage(returnNextErrorElement(event.target), {
+        message: "Credit card fields must each be four numeric digits",
+      });
+    }
+  }
+
   function validateName(element) {
+    let result = { status: true };
     if (element.value.length === 0) {
-      return false;
+      result.status = false;
+      result.message = "Required field";
+    } else if (!element.value.match(/[a-z]/i)) {
+      result.status = false;
+      result.message = "Names must consist only of letters";
     }
 
-    return true;
+    return result;
   }
 
   function validatePassword(element) {
+    let result = { status: true };
     if (element.value.length < 10) {
-      return false;
+      result.status = false;
+      result.message = "Password must be 10 or more characters";
     }
 
-    return true;
+    return result;
   }
 
   function validatePhoneNumber(element) {
-    if (element.value.length === 0) return true;
-    else if (!element.value.match(/^\d{3}-\d{3}-\d{4}$/)) {
-      return false;
+    let result = { status: true };
+
+    if (element.value.length === 0) {
+      return result;
+    } else if (!element.value.match(/^([0-9]|-)+$/)) {
+      result.status = false;
+      result.message =
+        "Optional phone number must consist of numbers and dashes";
+    } else if (!element.value.match(/^\d{3}-\d{3}-\d{4}$/)) {
+      result.status = false;
+      result.message =
+        "Optional phone number must follow the pattern 123-456-7890";
     }
 
-    return true;
+    return result;
   }
 
   function validateEmail(element) {
+    let result = { status: true };
     if (!element.value.match(/.+@.+/)) {
-      return false;
+      result.status = false;
+      result.message = "Please enter a valid email address";
     }
 
-    return true;
+    return result;
+  }
+
+  function validateCreditCard(element) {
+    let result = { status: true };
+    if (element.value.length !== 4) {
+      result.status = false;
+      result.message = "Credit card segment must be 4 digits long";
+    } else if (element.value.match(/[^0-9]/)) {
+      result.status = false;
+      result.message = "Credit card segment must be numbers only";
+    }
+
+    return result;
   }
 
   function submitToggle() {
@@ -50,7 +119,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  form.addEventListener("focusout", (event) => {
+  function returnNextErrorElement(element) {
+    if (!element) return null;
+    if (element.id.match("-error")) return element;
+    else return returnNextErrorElement(element.nextElementSibling);
+  }
+
+  function displayErrorMessage(inputField, statusObject) {
+    let messageArea = inputField.id.match("-error")
+      ? inputField
+      : returnNextErrorElement(inputField);
+    messageArea.className = "displayed-error-message";
+    messageArea.innerText = statusObject.message;
+  }
+
+  function offclickValidator(event) {
+    if (event.target === submitButton) return;
     submitToggle();
 
     let dispatchTable = {
@@ -59,18 +143,71 @@ document.addEventListener("DOMContentLoaded", () => {
       email: validateEmail(event.target),
       password: validatePassword(event.target),
       "phone-number": validatePhoneNumber(event.target),
+      "credit-card-": validateCreditCard(event.target),
     };
 
-    let messageArea = event.target.nextElementSibling;
-    let isValid = dispatchTable[event.target.id];
-    if (isValid) messageArea.className = "hidden-error-message";
-    else messageArea.className = "displayed-error-message";
-  });
+    let messageArea = returnNextErrorElement(event.target);
+    let name = event.target.id.replace(/\d+$/, "");
+    let validation = dispatchTable[name];
+
+    if (validation.status) messageArea.className = "hidden-error-message";
+    else displayErrorMessage(messageArea, validation);
+  }
+
+  form.addEventListener("focusout", offclickValidator);
 
   form.addEventListener("focusin", (event) => {
-    let messageArea = event.target.nextElementSibling;
-    messageArea.className = "hidden-error-message";
+    if (event.target === submitButton) return;
+    document.querySelector("#form-error").remove();
+    let messageArea = returnNextErrorElement(event.target);
+    if (event.target.id.match("credit-card")) {
+      if (
+        [...document.querySelectorAll('[id^="credit-card"]')].some((ele) =>
+          returnNextErrorElement(ele).className.match("displayed-error")
+        )
+      ) {
+        messageArea.className = "displayed-error-message";
+      } else {
+        messageArea.className = "hidden-error-message";
+      }
+    } else {
+      messageArea.className = "hidden-error-message";
+    }
 
     submitToggle();
+  });
+
+  function fieldValidator(element) {
+    submitToggle();
+
+    let dispatchTable = {
+      "first-name": validateName(element),
+      "last-name": validateName(element),
+      email: validateEmail(element),
+      password: validatePassword(element),
+      "phone-number": validatePhoneNumber(element),
+      "credit-card-": validateCreditCard(element),
+    };
+
+    let name = element.id.replace(/\d+$/, "");
+    let validation = dispatchTable[name];
+    return validation;
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    if (
+      [firstName, lastName, email, password, phone].some((ele) => {
+        return fieldValidator(ele).status === false;
+      })
+    ) {
+      let error = document.createElement("div");
+      error.className = "displayed-error-message";
+      error.id = "form-error";
+      error.innerText = "Please correct errors before submission";
+      document.querySelector("main").insertAdjacentElement("afterbegin", error);
+      submitToggle();
+    }
   });
 });

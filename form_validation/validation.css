@@ -21,3 +21,9 @@ label {
   font-weight: bold;
   visibility: visible;
 }
+
+.credit-field {
+  display: inline;
+  max-width: 8vw;
+  min-width: 5vw;
+}

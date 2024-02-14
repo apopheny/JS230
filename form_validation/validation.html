@@ -15,8 +15,11 @@
           id="first-name"
           name="first-name"
           placeholder="first name"
+          autocomplete="given-name"
         />
-        <div class="hidden-error-message">Error: first name required</div>
+        <div class="hidden-error-message" id="first-name-error">
+          Error: first name required
+        </div>
 
         <label for="last-name">Last name:</label>
         <input
@@ -24,8 +27,11 @@
           id="last-name"
           name="last-name"
           placeholder="last name"
+          autocomplete="family-name"
         />
-        <div class="hidden-error-message">Error: last name required</div>
+        <div class="hidden-error-message" id="last-name-error">
+          Error: last name required
+        </div>
 
         <label for="email">Email:</label>
         <input
@@ -34,11 +40,13 @@
           name="email"
           placeholder="email address"
         />
-        <div class="hidden-error-message">Error: Invalid email address</div>
+        <div class="hidden-error-message" id="email-error">
+          Error: Invalid email address
+        </div>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" />
-        <div class="hidden-error-message">
+        <div class="hidden-error-message" id="password-error">
           Error: password must be 10 or more characters
         </div>
 
@@ -49,7 +57,40 @@
           name="phone-number"
           placeholder="Phone number"
         />
-        <div class="hidden-error-message">
+        <div class="hidden-error-message" id="phone-error">
+          Error: phone number must be formatted as 111-111-1111
+        </div>
+
+        <label for="credit-card">Credit-card:</label>
+        <input
+          type="text"
+          id="credit-card-1"
+          name="credit-card"
+          placeholder="XXXX"
+          class="credit-field"
+        />-
+        <input
+          type="text"
+          id="credit-card-2"
+          name="credit-card"
+          class="credit-field"
+          placeholder="XXXX"
+        />-
+        <input
+          type="text"
+          id="credit-card-3"
+          name="credit-card"
+          class="credit-field"
+          placeholder="XXXX"
+        />-
+        <input
+          type="text"
+          id="credit-card-4"
+          name="credit-card"
+          class="credit-field"
+          placeholder="XXXX"
+        />
+        <div class="hidden-error-message" id="credit-error">
           Error: phone number must be formatted as 111-111-1111
         </div>
 
