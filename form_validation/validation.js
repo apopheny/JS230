@@ -8,23 +8,23 @@ document.addEventListener("DOMContentLoaded", () => {
   let submitButton = document.querySelector(".submit");
 
   [firstName, lastName].forEach((element) =>
-    element.addEventListener("keyup", validateNameChars)
+    element.addEventListener("keydown", validateNameChars)
   );
 
   function validateNameChars(event) {
-    event.preventDefault();
     if (!event.key.match(/[a-z]/i)) {
+      event.preventDefault();
       displayErrorMessage(returnNextErrorElement(event.target), {
         message: "Names must consist only of letters",
       });
     }
   }
 
-  phone.addEventListener("keyup", validatePhoneChars);
+  phone.addEventListener("keydown", validatePhoneChars);
 
   function validatePhoneChars(event) {
-    event.preventDefault();
     if (!event.key.match(/([0-9]|-)/)) {
+      event.preventDefault();
       displayErrorMessage(returnNextErrorElement(event.target), {
         message:
           "Optional phone number must consist only of numbers and dashes",
@@ -33,15 +33,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   [...document.querySelectorAll('[id^="credit-card"]')].forEach((element) =>
-    element.addEventListener("keyup", validateCreditChars)
+    element.addEventListener("keydown", validateCreditChars)
   );
 
   function validateCreditChars(event) {
-    event.preventDefault();
-    if (!event.key.match(/[0-9]/)) {
+    const UTILITY_KEYS = [
+      "Tab",
+      "Enter",
+      `Escape`,
+      "Backspace",
+      "Delete",
+      "ArrowLeft",
+      "ArrowRight",
+    ];
+
+    if (!event.key.match(/[0-9]/) && !UTILITY_KEYS.includes(event.key)) {
+      event.preventDefault();
       displayErrorMessage(returnNextErrorElement(event.target), {
         message: "Credit card fields must each be four numeric digits",
       });
+    }
+    if (event.target.value.length >= 4) {
+      if (event.target.nextElementSibling.className === "credit-field") {
+        console.log(event.target.nextElementSibling);
+        event.target.nextElementSibling.focus();
+      }
     }
   }
 
@@ -158,7 +174,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   form.addEventListener("focusin", (event) => {
     if (event.target === submitButton) return;
-    document.querySelector("#form-error").remove();
+    if (document.querySelector("#form-error")) {
+      document.querySelector("#form-error").remove();
+    }
+
     let messageArea = returnNextErrorElement(event.target);
     if (event.target.id.match("credit-card")) {
       if (
