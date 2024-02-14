@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const UTILITY_KEYS = [
     "Tab",
     "Enter",
-    `Escape`,
+    "Escape",
     "Backspace",
     "Delete",
     "ArrowLeft",
@@ -62,16 +62,16 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   function validateCreditChars(event) {
+    console.log(event.key);
     if (!event.key.match(/[0-9]/) && !UTILITY_KEYS.includes(event.key)) {
       event.preventDefault();
       displayErrorMessage(returnNextErrorElement(event.target), {
         message: "Credit card fields must each be four numeric digits",
       });
     }
-    if (event.target.value.length >= 4) {
-      event.preventDefault();
+    if (event.target.value.length === 4) {
+      if (!UTILITY_KEYS.includes(event.key)) event.preventDefault();
       if (event.target.nextElementSibling.className === "credit-field") {
-        console.log(event.target.nextElementSibling);
         event.target.nextElementSibling.focus();
       }
     }
