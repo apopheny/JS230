@@ -1,0 +1,39 @@
+div,
+span {
+  border: thick solid rgba(255, 255, 255, 0);
+}
+
+.form_submission_element {
+  margin: 10px;
+}
+
+.answer_container {
+  display: flex;
+}
+
+fieldset {
+  max-width: fit-content;
+}
+
+span {
+  flex-direction: row;
+  max-width: 150px;
+  min-width: 150px;
+}
+
+.correct_answer {
+  box-sizing: border-box;
+  border: thick solid #006a0ea9;
+}
+
+.wrong_answer {
+  max-width: fit-content;
+  box-sizing: border-box;
+  border: thick solid #d00000a9;
+}
+
+.answer_error {
+  max-width: fit-content;
+  box-sizing: border-box;
+  border: thick solid #d00000a9;
+}

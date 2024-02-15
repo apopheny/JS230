@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="mcq.css" />
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <title>Multiple choice quiz</title>
+
+    <script id="questionsTemplate" type="text/x-handlebars-template">
+      <form id='quiz' action='' method=''>
+        {{#each this}}
+        <div  id='question_{{id}}'><h3 ><strong>{{id}}. {{{description}}}</strong></h3>
+          <fieldset class="answer_container">
+              {{#each options}}
+                <span><input type='radio' id='{{@index}}' name="{{../id}}">{{this}}</input></span>
+              {{/each}}
+          </fieldset>
+        </div>
+        {{/each}}
+        <div>
+          <input type="submit" id="quiz_submit" class="form_submission_element">
+          <input type="reset" id="quiz_reset" class="form_submission_element">
+        </div>
+      </form>
+    </script>
+  </head>
+  <body>
+    <main></main>
+    <script src="mcq.js"></script>
+  </body>
+</html>
