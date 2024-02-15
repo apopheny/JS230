@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const QUIZ = document.getElementById("quiz");
   const RESET = document.getElementById("quiz_reset");
-  const QUESTIONS = [...document.querySelectorAll('div[id^="question"]')];
+  const QUESTIONS = [...document.querySelectorAll("div[id^='question']")];
 
   function removeErrorMessages() {
     let errors = [...document.querySelectorAll(".answer_error")];
