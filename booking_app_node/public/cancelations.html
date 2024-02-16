@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+    <script id="bookedSchedulesTemplate" type="text/x-handlebars-template">
+      {{#each this}}
+        <ul id="{{this}}"><strong>{{this}}</strong>
+          <li><a href="#" class="staffCancel">Staff requests cancelation?</a></li>
+          <li><a href="#" class="studentCancel">Student requests cancelation?</a></li>
+        </ul>
+      {{/each}}
+    </script>
+
+    <title>Cancelations</title>
+  </head>
+  <body>
+    <main>
+      <h1>Booked Schedules</h1>
+    </main>
+    <script src="javascripts/cancelations.js"></script>
+  </body>
+</html>
