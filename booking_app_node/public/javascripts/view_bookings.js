@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
   class Booking {
-    #dates;
     #templates;
 
     constructor() {
-      this.#dates = null;
       this.#templates = {};
       this.bookingDates = null;
     }
@@ -75,14 +73,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
           }
 
-          if (request.error) {
-            reject(
-              `Error encountered during bookings request. ${request.status}`
-            );
-          }
-
           resolve(JSON.parse(request.response));
         });
+
+        request.onerror = () => {
+          reject(
+            `Error encountered during bookings request. ${request.status}`
+          );
+        };
 
         request.send();
       });
