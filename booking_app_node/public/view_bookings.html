@@ -11,9 +11,19 @@
     <script id="datesTemplate" type="text/x-handlebars-template">
       <ul id="booking_dates">
         {{#each this}}
-          <li id="booking_date{{@index}}" data-date="{{this}}">{{this}}</li>
+          <li id="booking_date_{{@index}}" data-date="{{this}}">{{this}}</li>
         {{/each}}
       </ul>
+    </script>
+
+    <script id="bookingDetails" type="text/x-handlebars-template">
+      {{#each this}}
+        <ul id="booking_info_{{@index}}"><li>{{this.staff}}
+            |
+            {{this.studentEmail}}
+            |
+            {{this.time}}</li></ul>
+      {{/each}}
     </script>
 
     <script src="javascripts/view_bookings.js"></script>
