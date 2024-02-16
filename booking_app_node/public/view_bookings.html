@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <title>View Bookings</title>
+  </head>
+  <body>
+    <script id="datesTemplate" type="text/x-handlebars-template">
+      <ul id="booking_dates">
+        {{#each this}}
+          <li id="booking_date{{@index}}" data-date="{{this}}">{{this}}</li>
+        {{/each}}
+      </ul>
+    </script>
+
+    <script src="javascripts/view_bookings.js"></script>
+  </body>
+  <h1>View Bookings</h1>
+  <main></main>
+</html>
