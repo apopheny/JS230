@@ -34,15 +34,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     renderDetails(date) {
       this.getDetails(date)
-        .then((res) => this.parseDetails(res))
-        .then((res) => {
+        .then((result) => this.parseDetails(result))
+        .then((result) => {
           let $ele = $(`[data-date=${date}]`);
           if ($ele.children().length > 0) {
             $ele
               .children()
-              .replaceWith(this.#templates.bookingDetailTemplate(res));
+              .replaceWith(this.#templates.bookingDetailTemplate(result));
           } else {
-            $ele.append(this.#templates.bookingDetailTemplate(res));
+            $ele.append(this.#templates.bookingDetailTemplate(result));
           }
         })
         .catch(console.error);
@@ -122,10 +122,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       let $main = $("main");
 
       return this.getDates()
-        .then((res) => {
-          return this.#templates.bookingDatesTemplate(res);
+        .then((result) => {
+          return this.#templates.bookingDatesTemplate(result);
         })
-        .then((res) => $main.append(res))
+        .then((result) => $main.append(result))
         .catch(console.error);
     }
   }
