@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "application/json; charset=utf-8"
         );
 
-        request.onError = () => {
+        request.onerror = () => {
           reject(
             `Retrieving schedules failed. ${request.status}: ${request.statusText}`
           );
