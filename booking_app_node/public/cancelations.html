@@ -19,21 +19,23 @@
             <li><a href="#" class="studentCancel">Student cancel?</a></li>
           </ul>
         {{/each}}
-      {{else}}<p><strong>No schedules booked!</strong></p>
+      {{else}}<p><strong>No students booked!</strong></p>
       {{/if}}
     </script>
 
     <script id="studentBookingsTemplate" type="text/x-handlebars-template">
-      {{#each this}}
-        <h1>Cancel booking on {{date}}</h1>
-        <ul>
-          <li id="email">Student email: {{student_email}}</li>
-          <li id="time">Appointment time: {{time}}</li>
-        </ul>
-        <form id="student_cancel">
-          <input type="submit" value="Cancel booking?" />
-        </form>
-      {{/each}}
+      <div class="student_cancel">
+        {{#each this}}
+          <h1>Cancel booking on {{date}}</h1>
+          <ul>
+            <li id="email">Student email: {{student_email}}</li>
+            <li id="time">Appointment time: {{time}}</li>
+          </ul>
+          <form id="student_cancel">
+            <input type="submit" value="Cancel booking?" />
+          </form>
+        {{/each}}
+      </div>
     </script>
 
     <script id="staffSchedulesTemplate" type="text/x-handlebars-template">
@@ -53,14 +55,10 @@
             <li><a href="#" class="staffCancel">Staff cancel?</a></li>
           </ul>
         {{/each}}
-      {{else}}<p><strong>No schedules booked!</strong></p>
+      {{else}}<p><strong>Schedules failed to load or no staff schedules
+            available!</strong></p>
       {{/if}}
     </script>
-
-    <script
-      id="staffBookingsTemplate"
-      type="text/x-handlebars-template"
-    ></script>
 
     <title>Cancelations</title>
   </head>

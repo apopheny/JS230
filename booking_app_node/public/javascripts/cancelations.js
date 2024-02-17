@@ -8,17 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     init() {
+      $("div.student_cancel").remove();
       this.getTemplates();
 
-      this.renderBookings();
-      if (!this.#bookings) {
-        this.updateBookings()
-          .then(() => this.renderSchedules())
-          .then(() => this.bindEventListeners());
-      } else {
+      this.updateBookings().then(() => {
         this.renderSchedules();
-        this.bindEventListeners();
-      }
+        this.renderBookings();
+      });
     }
 
     getTemplates() {
@@ -44,6 +40,87 @@ document.addEventListener("DOMContentLoaded", () => {
       $("#student_cancel").on("submit", this.cancelStudentBooking.bind(this));
     }
 
+    renderStudentCancel(event) {
+      let date = event.target.closest("ul").id;
+      $("main").children().remove();
+
+      $("main").append(
+        this.#templates.displayStudent(this.filterBookingInfo(date))
+      );
+
+      this.bindStudentCancelListener();
+    }
+
+    renderSchedules() {
+      $("div#staffSchedules").remove();
+      let $div = $(document.createElement("div"));
+      $div.attr("id", "staffSchedules");
+      $div.append(this.#templates.displaySchedules(this.#bookings));
+
+      if ($("div#studentBookings").length > 0) {
+        $div.insertAfter($("div#studentBookings"));
+      } else {
+        $("main").append($div);
+      }
+    }
+
+    renderBookings() {
+      this.getBookings().then((result) => {
+        $("div#studentBookings").remove();
+        let $div = $(document.createElement("div"));
+        $div.attr("id", "studentBookings");
+        $div.append(this.#templates.displayBooked(result));
+
+        if ($("div#staffSchedules").length > 0) {
+          $div.insertBefore($("div#staffSchedules"));
+        } else {
+          $("main").append($div);
+        }
+
+        this.bindEventListeners();
+      });
+    }
+
+    updateBookings() {
+      return this.getBookingInfo()
+        .then((result) => (this.#bookings = result))
+        .catch(console.error);
+    }
+
+    getBookingInfo() {
+      let promiseRequest = new Promise((resolve, reject) => {
+        let request = new XMLHttpRequest();
+        request.open("GET", "/api/schedules");
+        request.responseType = "json";
+        request.setRequestHeader(
+          "Content-Type",
+          "application/json; charset=utf-8"
+        );
+
+        request.timeout = 7100;
+
+        request.ontimeout = () => {
+          reject(
+            `Retrieving booking information failed due to slow network responsed. ${request.statusText}`
+          );
+        };
+
+        request.onerror = () => {
+          reject(
+            `Retrieving student booking information failed. ${request.status}: ${request.statusText}`
+          );
+        };
+
+        request.onload = () => {
+          resolve(request.response);
+        };
+
+        request.send();
+      });
+
+      return promiseRequest;
+    }
+
     cancelStaffSchedule(event) {
       let time = $(event.target).parent().siblings(".time").text();
       let date = $(event.target)
@@ -57,7 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .text()
         .match(/(\S+$)/)[1];
       let email = $(event.target).parent().siblings(".warning").text();
-      console.log(email);
       email = email.length || null;
 
       this.postStaffCancelation(staff_id, date, time, email)
@@ -71,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         alert(
           "This schedule cannot be canceled. Student has not canceled previously booked appointment."
         );
-        return;
+        return Promise.resolve("Unable to cancel schedule with booking");
       }
 
       let keys = Object.getOwnPropertyNames(info);
@@ -152,60 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
           resolve(
             `Student cancelation request for ${info.student_email} successful!`
           );
-        };
-
-        request.send();
-      });
-
-      return promiseRequest;
-    }
-
-    renderStudentCancel(event) {
-      let date = event.target.closest("ul").id;
-      $("main").children().remove();
-
-      $("main").append(
-        this.#templates.displayStudent(this.filterBookingInfo(date))
-      );
-
-      this.bindStudentCancelListener();
-    }
-
-    updateBookings() {
-      return this.getBookingInfo()
-        .then((result) => (this.#bookings = result))
-        .catch(console.error);
-    }
-
-    renderBookings() {
-      this.getBookings().then((result) => {
-        $("main").children().remove();
-        $("main").append(this.#templates.displayBooked(result));
-      });
-    }
-
-    renderSchedules() {
-      $("main").append(this.#templates.displaySchedules(this.#bookings));
-    }
-
-    getBookingInfo() {
-      let promiseRequest = new Promise((resolve, reject) => {
-        let request = new XMLHttpRequest();
-        request.open("GET", "/api/schedules");
-        request.responseType = "json";
-        request.setRequestHeader(
-          "Content-Type",
-          "application/json; charset=utf-8"
-        );
-
-        request.onerror = () => {
-          reject(
-            `Retrieving student booking information failed. ${request.status}: ${request.statusText}`
-          );
-        };
-
-        request.onload = () => {
-          resolve(request.response);
         };
 
         request.send();
