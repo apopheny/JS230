@@ -1,14 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <script src="/javascripts/jquery.js"></script>
-  <script src="/javascripts/handlebars.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/index.css"></link>
+    <script src="/javascripts/handlebars.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Contact Manager</h1>
+      <h2>Using Handlebars and MVC</h2>
+    </header>
 
-</body>
+    <main>  
+      <section id="contacts"></section>
+    </main>
+
+    <script id="defaultPageTemplate" type="text/x-handlebars-template">
+      {{> contactsList contacts}}
+    </script>
+
+    <script id="contactInfoPartial" type="text/x-handlebars-template">
+      {{#each this}}
+      <div class="contact_block">
+        <h3 class="contact_heading">{{this.name}}</h3>
+        <div class="info_heading">Phone number:</div>
+        <div class="info_detail">{{this.phone}}</div>
+        <div class="info_heading">Email:</div>
+        <div class="info_detail">{{this.email}}</div>
+        <div class="info_heading">Tags:</div>
+        {{#if this.tags}}
+          <div class="info_detail">
+            {{#each this.tags}}
+              <span class="info_detail">
+                <a class='tag' data-tag='{{this}}' href="#">#{{this}}</a>{{#unless @last}}, {{/unless}}
+              </span>
+            {{/each}}
+          </div>
+        {{/if}}
+        <button class="contact_edit">Edit</button><button class="contact_delete">Delete</button>
+      </div>
+      {{/each}}
+    </script>
+
+    <script src="/javascripts/controller.js" type="module"></script>
+  </body>
 </html>
