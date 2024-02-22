@@ -9,15 +9,17 @@
     <script src="/javascripts/handlebars.js"></script>
   </head>
   <body>
+    <h1>Contact Manager</h1>
+    <h2>Using Handlebars and MVC</h2>
+    <nav style="font-weight: bold;">
+        <a href="#">Home</a> 
+    </nav>
+
 
     <script id="base" type="text/x-handlebars-template">
-      <h1>Contact Manager</h1>
-      <h2>Using Handlebars and MVC</h2>
+     
       <header>
-        <nav style="font-weight: bold;">
-          <a href="#">Home</a> 
-        </nav>
-
+      
         <search id="contact_search_bar">
           <span style="font-weight: bold;">Search contacts:</span><input id="search_input" type="text" placeholder="type here to search" style="margin-left: 2rem;">
         </search>
@@ -75,6 +77,28 @@
       {{else}}
         <span class="info_heading">No tags have been entered</span>
       {{/if}}
+    </script>
+
+    <script id="createContactTemplate" type="text/x-handlebars-template">
+      <form id="new_contact_form">
+        <div  class="info_heading">
+          <label for="full_name" class="info_heading">Full name:</label>
+          <input type="text" name="full_name" id="full_name">
+        </div>
+        <div class="info_heading">
+          <label for="email_address" class="info_heading">Email address:</label>
+          <input type="text" name="email_address" id="email_address">
+        </div>
+        <div class="info_heading">
+          <label for="phone_number" class="info_heading">Phone number:</label>
+          <input type="text" name="phone_number" id="phone_number">
+        </div>
+        <div class="info_heading">
+          <label for="contact_tags" class="info_heading">Tags:</label>
+          <input type="text" name="contact_tags" id="phone_number">
+        </div>
+        <input type="button" value="Submit" id="submit_button">
+      </form>
     </script>
 
     <script src="/javascripts/controller.js" type="module"></script>

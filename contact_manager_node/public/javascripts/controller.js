@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     addNewContact(event) {
       event.preventDefault();
+      this.#view.renderNewContact();
     }
 
     searchContacts(event) {

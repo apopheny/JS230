@@ -26,14 +26,44 @@ footer {
   flex-direction: row;
   align-items: center;
   flex-wrap: wrap;
-  max-width: 50%vw;
 }
 
 section {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  max-width: 50%vw;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the form itself */
+  width: 75%; /* Adjust as necessary */
+}
+
+form div {
+  display: flex;
+  justify-content: space-between; /* Ensures labels and inputs are on opposite ends */
+  align-items: center; /* Vertically aligns items in the middle */
+  width: 100%; /* Ensures the div takes the full width of the form */
+  padding: 10px;
+}
+
+form label {
+  width: 30%; /* Fixed width for labels */
+  text-align: left; /* Aligns the label text to the right */
+  padding-right: 10px; /* Adds some space between the label and the input */
+}
+
+form input {
+  min-width: 40%; /* Fixed width for inputs */
+  margin-left: 20px;
 }
 
 .contact_block {
@@ -60,14 +90,13 @@ section {
 
 #contact_search_bar {
   display: inline;
-
   padding: 13px;
 }
 
 #contact_add,
-#tag_add {
+#tag_add,
+#submit_button {
   max-width: 70px;
   line-height: 0.75rem;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: 10px;
 }

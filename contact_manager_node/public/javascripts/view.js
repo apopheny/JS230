@@ -1,10 +1,8 @@
 class View {
   #templates;
-  #elements;
 
   constructor(homeTemplate) {
     this.#templates = {};
-    this.#elements = {};
   }
 
   init() {
@@ -17,6 +15,9 @@ class View {
     this.#templates.tags = Handlebars.compile(
       document.getElementById("tagTemplate").innerHTML
     );
+    this.#templates.addContact = Handlebars.compile(
+      document.getElementById("createContactTemplate").innerHTML
+    );
     Handlebars.registerPartial(
       "contactsList",
       document.getElementById("contactInfoPartial").innerHTML
@@ -24,7 +25,7 @@ class View {
   }
 
   renderBase() {
-    document.body.innerHTML = this.#templates.base("");
+    document.body.insertAdjacentHTML("beforeend", this.#templates.base(""));
   }
 
   renderContacts(data) {
@@ -41,6 +42,13 @@ class View {
       html = this.#templates.tags(data);
       document.getElementById("tags").innerHTML = html;
     }
+  }
+
+  renderNewContact() {
+    [...document.querySelectorAll("header, footer")].forEach((ele) =>
+      ele.remove()
+    );
+    document.querySelector("main").innerHTML = this.#templates.addContact("");
   }
 }
 
