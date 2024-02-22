@@ -4,45 +4,77 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>Contact Manager</title>
     <link rel="stylesheet" href="/stylesheets/index.css"></link>
     <script src="/javascripts/handlebars.js"></script>
   </head>
   <body>
-    <header>
+
+    <script id="base" type="text/x-handlebars-template">
       <h1>Contact Manager</h1>
       <h2>Using Handlebars and MVC</h2>
-    </header>
+      <header>
+        <nav style="font-weight: bold;">
+          <a href="#">Home</a> 
+        </nav>
 
-    <main>  
-      <section id="contacts"></section>
-    </main>
+        <search id="contact_search_bar">
+          <span style="font-weight: bold;">Search contacts:</span><input id="search_input" type="text" placeholder="type here to search" style="margin-left: 2rem;">
+        </search>
+        <button id="contact_add">Add New Contact</button>
+      </header>
+  
+      <main>
+        <section id="contacts"></section>
+      </main>
+
+      <footer>
+        <section id="tags"><span class='info_heading'>Tags:</span></section>
+        <button id="tag_add">Add New Tag</button>
+      </footer>
+    </script>
 
     <script id="defaultPageTemplate" type="text/x-handlebars-template">
-      {{> contactsList contacts}}
+      <main>  
+        <section id="contacts">{{> contactsList contacts}}</section>
+      </main>
     </script>
 
     <script id="contactInfoPartial" type="text/x-handlebars-template">
-      {{#each this}}
-      <div class="contact_block">
-        <h3 class="contact_heading">{{this.name}}</h3>
-        <div class="info_heading">Phone number:</div>
-        <div class="info_detail">{{this.phone}}</div>
-        <div class="info_heading">Email:</div>
-        <div class="info_detail">{{this.email}}</div>
-        <div class="info_heading">Tags:</div>
-        {{#if this.tags}}
-          <div class="info_detail">
-            {{#each this.tags}}
-              <span class="info_detail">
-                <a class='tag' data-tag='{{this}}' href="#">#{{this}}</a>{{#unless @last}}, {{/unless}}
-              </span>
-            {{/each}}
-          </div>
-        {{/if}}
-        <button class="contact_edit">Edit</button><button class="contact_delete">Delete</button>
-      </div>
-      {{/each}}
+      {{#if this}}
+        {{#each this}}
+        <div class="contact_block">
+          <h3 class="contact_heading">{{this.name}}</h3>
+          <div class="info_heading">Phone number:</div>
+          <div class="info_detail">{{this.phone}}</div>
+          <div class="info_heading">Email:</div>
+          <div class="info_detail">{{this.email}}</div>
+          <div class="info_heading">Tags:</div>
+          {{#if this.tags}}
+            <div class="info_detail">
+              {{#each this.tags}}
+                <span class="info_detail">
+                  <a class='tag' data-tag='{{this}}' href="#">#{{this}}</a>{{#unless @last}}, {{/unless}}
+                </span>
+              {{/each}}
+            </div>
+          {{/if}}
+          <button class="contact_edit">Edit</button><button class="contact_delete">Delete</button>
+        </div>
+        {{/each}}
+      {{else}}<div class="info_heading" style="padding: 50px; padding-top: 90px; padding-bottom: 90px;">No contacts listed</div>
+      {{/if}}
+    </script>
+
+    <script id="tagTemplate" type="text/x-handlebars-template">
+      <section id="tags"><span class='info_heading'>Tags:</span></section>
+      {{#if this}}
+        {{#each this}}
+          <a href="#" class="tag_link" data-tag="{{this.tag}}">#{{this.tag}}</a>{{#unless @last}},&nbsp;{{/unless}}
+        {{/each}}
+      {{else}}
+        <span class="info_heading">No tags have been entered</span>
+      {{/if}}
     </script>
 
     <script src="/javascripts/controller.js" type="module"></script>

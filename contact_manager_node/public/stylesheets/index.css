@@ -1,6 +1,13 @@
 * {
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  background-color: beige;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
@@ -11,21 +18,56 @@ h2 {
   font-size: 1.75rem;
 }
 
+header,
+footer {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 50%vw;
+}
+
 section {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  max-width: 50%vw;
 }
 
 .contact_block {
-  padding: 20px;
+  padding: 10px;
+  background-color: rgb(175, 175, 160);
 }
 
 .contact_heading {
   font-size: 1.5rem;
   font-weight: bolder;
+  background-color: rgb(175, 175, 160);
 }
 
 .info_heading {
   font-weight: bold;
+  background-color: rgb(175, 175, 160);
+}
+
+.info_detail,
+.tag,
+.tag_link {
+  background-color: rgb(175, 175, 160);
+}
+
+#contact_search_bar {
+  display: inline;
+
+  padding: 13px;
+}
+
+#contact_add,
+#tag_add {
+  max-width: 70px;
+  line-height: 0.75rem;
+  margin-left: 10px;
+  margin-right: 10px;
 }

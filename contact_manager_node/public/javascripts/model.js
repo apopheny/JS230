@@ -15,35 +15,51 @@ class Model {
       tags: ["pug", "good boi"],
     },
   ];
-  #placeholderTags = ["full-stack", "programmer", "pug", "good boi"];
+  #placeholderTags = [
+    { tag: "full-stack" },
+    { tag: "programmer" },
+    { tag: "pug" },
+    { tag: "good boi" },
+  ];
 
   constructor() {
-    this.#contacts = localStorage.getItem("contacts");
-    this.#contacts = localStorage.getItem("tags");
+    this.#contacts = null;
+    this.#tags = null;
   }
 
   init() {
-    if (!this.#contacts) {
-      this.resetDataStore();
-      this.retrieveField(this.#contacts, "contacts");
-      this.retrieveField(this.#tags, "tags");
-    }
+    this.resetDataStore();
+    this.#contacts = JSON.parse(localStorage.getItem("contacts"));
+    this.#tags = JSON.parse(localStorage.getItem("tags"));
   }
 
-  resetDataStore(contacts, tags) {
+  resetDataStore() {
     localStorage.setItem("contacts", JSON.stringify(this.#placeholderContacts));
     localStorage.setItem("tags", JSON.stringify(this.#placeholderTags));
   }
 
-  updateField(data, field, fieldName) {
-    field.push(data);
-    localStorage.setItem(fieldName, JSON.stringify(field));
-    return field.length;
+  copyField(field) {
+    return JSON.parse(JSON.stringify(field));
   }
 
-  retrieveField(field, fieldName) {
-    field = JSON.parse(localStorage.getItem(fieldName));
-    return field;
+  contacts() {
+    return this.copyField(this.#contacts);
+  }
+
+  tags() {
+    return this.copyField(this.#tags);
+  }
+
+  updateContacts(data) {
+    this.#contacts.push(data);
+    localStorage.setItem("contacts", JSON.stringify(data));
+    return this.#contacts.length;
+  }
+
+  updateTags(data) {
+    this.#tags.push(data);
+    localStorage.setItem("tags", JSON.stringify(data));
+    return this.#tags.length;
   }
 }
 
