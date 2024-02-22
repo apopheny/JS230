@@ -88,6 +88,12 @@ form input {
   background-color: rgb(175, 175, 160);
 }
 
+.error {
+  color: darkred;
+  background-color: rgb(202, 128, 142);
+  font-size: smaller;
+}
+
 #contact_search_bar {
   display: inline;
   padding: 13px;

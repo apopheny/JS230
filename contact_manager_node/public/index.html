@@ -12,7 +12,7 @@
     <h1>Contact Manager</h1>
     <h2>Using Handlebars and MVC</h2>
     <nav style="font-weight: bold;">
-        <a href="#">Home</a> 
+        <a href="#" id="go_home">Home</a> 
     </nav>
 
 
@@ -46,17 +46,17 @@
       {{#if this}}
         {{#each this}}
         <div class="contact_block">
-          <h3 class="contact_heading">{{this.name}}</h3>
+          <h3 class="contact_heading" data-name="{{this.name}}">{{this.name}}</h3>
           <div class="info_heading">Phone number:</div>
-          <div class="info_detail">{{this.phone}}</div>
+          <div class="info_detail" data-phone="{{this.phone}}">{{this.phone}}</div>
           <div class="info_heading">Email:</div>
-          <div class="info_detail">{{this.email}}</div>
+          <div class="info_detail" data-email="{{this.email}}">{{this.email}}</div>
           <div class="info_heading">Tags:</div>
           {{#if this.tags}}
             <div class="info_detail">
               {{#each this.tags}}
                 <span class="info_detail">
-                  <a class='tag' data-tag='{{this}}' href="#">#{{this}}</a>{{#unless @last}}, {{/unless}}
+                  <a class='tag_link' data-tag='{{this}}' href="#">{{this}}</a>{{#unless @last}}, {{/unless}}
                 </span>
               {{/each}}
             </div>
@@ -72,7 +72,7 @@
       <section id="tags"><span class='info_heading'>Tags:</span></section>
       {{#if this}}
         {{#each this}}
-          <a href="#" class="tag_link" data-tag="{{this.tag}}">#{{this.tag}}</a>{{#unless @last}},&nbsp;{{/unless}}
+          <a href="#" class="tag_link" data-tag="{{this.tag}}">{{this.tag}}</a>{{#unless @last}},&nbsp;{{/unless}}
         {{/each}}
       {{else}}
         <span class="info_heading">No tags have been entered</span>
@@ -80,24 +80,24 @@
     </script>
 
     <script id="createContactTemplate" type="text/x-handlebars-template">
-      <form id="new_contact_form">
+      <form id="{{#if this}}edit_contact_form{{else}}new_contact_form{{/if}}">
         <div  class="info_heading">
-          <label for="full_name" class="info_heading">Full name:</label>
-          <input type="text" name="full_name" id="full_name">
+          <label for="full_name" class="info_heading" >Full name:</label>
+          <input type="text" name="full_name" id="full_name" value="{{this.name}}">
         </div>
         <div class="info_heading">
           <label for="email_address" class="info_heading">Email address:</label>
-          <input type="text" name="email_address" id="email_address">
+          <input type="text" name="email_address" id="email_address" value="{{this.email}}">
         </div>
         <div class="info_heading">
           <label for="phone_number" class="info_heading">Phone number:</label>
-          <input type="text" name="phone_number" id="phone_number">
+          <input type="text" name="phone_number" id="phone_number" value="{{this.phone}}">
         </div>
         <div class="info_heading">
           <label for="contact_tags" class="info_heading">Tags:</label>
-          <input type="text" name="contact_tags" id="phone_number">
+          <input type="text" name="contact_tags" id="contact_tags" value="{{#each this.tags}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}">
         </div>
-        <input type="button" value="Submit" id="submit_button">
+        <input type="submit" value="Submit" id="submit_button">
       </form>
     </script>
 

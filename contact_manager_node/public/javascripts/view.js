@@ -25,6 +25,7 @@ class View {
   }
 
   renderBase() {
+    if (document.querySelector("form")) document.querySelector("form").remove();
     document.body.insertAdjacentHTML("beforeend", this.#templates.base(""));
   }
 
@@ -44,11 +45,11 @@ class View {
     }
   }
 
-  renderNewContact() {
-    [...document.querySelectorAll("header, footer")].forEach((ele) =>
+  renderNewContact(data) {
+    [...document.querySelectorAll("header, footer, #contacts")].forEach((ele) =>
       ele.remove()
     );
-    document.querySelector("main").innerHTML = this.#templates.addContact("");
+    document.querySelector("main").innerHTML = this.#templates.addContact(data);
   }
 }
 
