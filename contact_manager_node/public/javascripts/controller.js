@@ -16,15 +16,19 @@ document.addEventListener("DOMContentLoaded", () => {
       this.#model.init();
       this.#view.init();
       this.defaultView();
-      this.updateElements();
     }
 
     defaultView() {
-      if (document.querySelector("header")) return;
-      this.#view.renderBase();
-      this.#view.renderContacts(this.#model.contacts());
-      this.#view.renderTags(this.#model.tags());
-      this.updateElements();
+      if (document.querySelector("header")) {
+        this.#view.renderContacts(this.#model.contacts());
+        this.#view.renderTags(this.#model.tags());
+        this.updateElements();
+      } else {
+        this.#view.renderBase();
+        this.#view.renderContacts(this.#model.contacts());
+        this.#view.renderTags(this.#model.tags());
+        this.updateElements();
+      }
     }
 
     updateElements() {
@@ -42,22 +46,20 @@ document.addEventListener("DOMContentLoaded", () => {
     getHomePageElements() {
       this.#elements.addContact = document.getElementById("contact_add");
       this.#elements.search = document.getElementById("contact_search_bar");
-      this.#elements.addTag = document.getElementById("tag_add");
-      return [
-        this.#elements.addContact,
-        this.#elements.search,
-        this.#elements.addTag,
-      ];
+      return [this.#elements.addContact, this.#elements.search];
     }
 
-    bindHomepageListeners([addContact, search, addTag]) {
+    bindHomepageListeners([addContact, search]) {
       addContact.addEventListener(
         "click",
         this.displayNewContactForm.bind(this)
       );
       search.addEventListener("keyup", this.searchContacts.bind(this));
-      addTag.addEventListener("click", this.addNewTag.bind(this));
-      document.addEventListener("click", this.clickDelegator.bind(this));
+
+      if (!document.body.hasClickListener) {
+        document.body.addEventListener("click", this.clickDelegator.bind(this));
+        document.body.hasClickListener = true;
+      }
     }
 
     getNewContactElements() {
@@ -292,6 +294,20 @@ document.addEventListener("DOMContentLoaded", () => {
         this.searchTags(event);
       } else if (event.target.classList.contains("contact_edit")) {
         this.displayContactEditForm(event);
+      } else if (event.target.classList.contains("contact_delete")) {
+        this.deleteContact(event);
+      }
+    }
+
+    deleteContact(event) {
+      let name = event.target.parentElement.querySelector("h3").innerText;
+      let response = confirm(
+        `Are you sure you want to delete contact "${name}"?`
+      );
+
+      if (response) {
+        this.#model.deleteContact(name);
+        this.defaultView();
       }
     }
 
@@ -303,10 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
         event.target.dataset.tag
       );
       this.#view.renderContacts(contacts);
-    }
-
-    addNewTag(event) {
-      event.preventDefault();
     }
 
     filterContactsByName(data, string) {

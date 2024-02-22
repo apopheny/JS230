@@ -26,6 +26,7 @@ class View {
 
   renderBase() {
     if (document.querySelector("form")) document.querySelector("form").remove();
+
     document.body.insertAdjacentHTML("beforeend", this.#templates.base(""));
   }
 

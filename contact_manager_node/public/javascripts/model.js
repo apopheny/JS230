@@ -58,14 +58,29 @@ class Model {
     );
   }
 
+  updateLocalStorage() {
+    localStorage.setItem("contacts", JSON.stringify(this.#contacts));
+    localStorage.setItem("tags", JSON.stringify(this.#tags));
+  }
+
+  deleteContact(name) {
+    let index = this.getContactIndex(name);
+    let tags = this.#contacts[index].tags;
+    this.pruneTags(tags);
+
+    this.#contacts.splice(index, 1);
+    this.updateLocalStorage();
+  }
+
   updateContacts(data) {
     this.#contacts.push(data);
-    localStorage.setItem("contacts", JSON.stringify(this.#contacts));
+    this.updateLocalStorage();
     return this.#contacts.length;
   }
 
   updateContact(index, data) {
     this.#contacts[index] = data;
+    this.updateLocalStorage();
     return true;
   }
 
@@ -73,6 +88,20 @@ class Model {
     this.#tags.push(data);
     localStorage.setItem("tags", JSON.stringify(this.#tags));
     return this.#tags.length;
+  }
+
+  pruneTags(tags) {
+    tags.forEach((tag) => {
+      if (
+        this.#contacts.filter((contact) => contact.tags.includes(tag)).length <=
+        1
+      ) {
+        let index = this.#tags.indexOf(tag);
+        this.#tags.splice(index, 1);
+      }
+    });
+
+    this.updateLocalStorage();
   }
 }
 
